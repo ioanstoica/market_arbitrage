@@ -1,0 +1,10 @@
+psql -U postgres -h localhost -p 5433
+
+CREATE DATABASE arbitrage;
+\l
+
+CREATE TABLE users ( \
+    "id" SERIAL PRIMARY KEY, \
+    "user" VARCHAR(50) NOT NULL, \
+    "password" VARCHAR(50) NOT NULL \
+);
