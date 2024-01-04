@@ -8,3 +8,5 @@ CREATE TABLE users (
     user VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL
 );
+
+Vreau sa salvez in baza de date extragerile din urma unei cautari pe olx

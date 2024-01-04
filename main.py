@@ -1,15 +1,18 @@
 import sys
 from olx import Olx
 from aliexpress import Aliexpress
+import database
 
 # Setăm codificarea consolei la UTF-8
 sys.stdout.reconfigure(encoding="utf-8")
+
+cursor, connection = database.get_cursor_and_connection()
 
 # URL-ul paginii de cautare OLX pentru "pubg-trigger"
 url = "https://www.olx.ro/oferte/q-pubg-trigger/"
 
 # Extrage ofertele de pe pagina de cautare de la Olx
-oferte_olx = Olx.get_oferte(url, limit=5)
+oferte_olx = Olx.get_oferte(url, limit=2)
 for oferta_olx in oferte_olx:
     try:
         oferta_olx.complete_fields()
@@ -18,6 +21,13 @@ for oferta_olx in oferte_olx:
         oferte_olx.remove(oferta_olx)
         print(e)
 print("Am extras si completat " + str(len(oferte_olx)) + " oferte de pe OLX.")
+
+for oferta_olx in oferte_olx:
+    print(oferta_olx)
+
+for oferta_olx in oferte_olx:
+    oferta_olx.save(cursor)
+    connection.commit()
 
 # # Filtram ofertele care au mai mult de 100 de vizualizari
 # oferte_vizualizate = []
@@ -79,3 +89,6 @@ print("Am extras si completat " + str(len(oferte_olx)) + " oferte de pe OLX.")
 #             f.write(oferta_olx.csv_line())
 #             f.write(oferta_aliexpress.csv_line())
 #             f.write("\n")
+
+
+database.close_cursor_and_connection(cursor, connection)
