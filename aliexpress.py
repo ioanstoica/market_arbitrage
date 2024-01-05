@@ -3,12 +3,14 @@ from bs4 import BeautifulSoup
 from oferta import Oferta
 from functions import get_page_source
 import re
+
+
 class AliexpresssOferta(Oferta):
     def complete_fields(self):
         self.find_titlu()
-        self.find_pret()
+        self.find_price()
 
-    def find_pret(self):
+    def find_price(self):
         try:
             # Extrage codul sursa al paginii dupa ce a fost incarcat un anumit element, folosind Selenium
             if not self.page_source:
@@ -20,15 +22,15 @@ class AliexpresssOferta(Oferta):
 
             # Extrage prețul din elementul găsit
             pret = pret_element.text.strip()
-            match = re.search(r'(\d[\d,.]*)', pret)
+            match = re.search(r"(\d[\d,.]*)", pret)
 
             if match:
                 number_str = match.group(1)
                 number_str = number_str.replace(",", "")
-                self.pret = number_str
+                self.price = number_str
         except:
             print("Nu s-a putut extrage pretul produsului cu url-ul: " + self.url)
-    
+
     def find_titlu(self):
         try:
             # Extrage codul sursa al paginii dupa ce a fost incarcat un anumit element, folosind Selenium
@@ -44,6 +46,7 @@ class AliexpresssOferta(Oferta):
             self.titlu = titlu
         except:
             print("Nu s-a putut extrage titlul produsului cu url-ul: " + self.url)
+
 
 class Aliexpress:
     # Returneaza o lista de oferte
@@ -66,4 +69,3 @@ class Aliexpress:
                 oferte.append(AliexpresssOferta(url=url))
 
         return oferte
-
