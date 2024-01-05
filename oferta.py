@@ -2,9 +2,9 @@
 class Oferta:
     def __init__(
         self,
-        id="No id",
+        id="0",
         titlu="No title",
-        pret="No price",
+        price="0",
         url="No url",
         views="No views",
         page_source=None,
@@ -12,7 +12,7 @@ class Oferta:
     ):
         self.id = id
         self.titlu = titlu
-        self.pret = pret
+        self.price = price
         self.url = url
         self.views = views
         self.page_source = page_source
@@ -27,7 +27,7 @@ class Oferta:
             + self.titlu
             + "\n"
             + "Pret: "
-            + self.pret
+            + self.price
             + "\n"
             + "Url: "
             + self.url
@@ -41,20 +41,20 @@ class Oferta:
             + ","
             + self.titlu
             + ","
-            + self.pret
+            + self.price
             + ","
             + self.url
             + ","
             + self.views
             + "\n"
         )
-    
+
     def complete_fields(self):
         pass
 
     def save_csv(self, file_name):
         with open(file_name, "a", encoding="utf-8") as f:
             f.write(self.csv_line())
-    
+
     def get_photo_urls(self):
         return self.photo_urls

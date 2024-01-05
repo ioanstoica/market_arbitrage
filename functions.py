@@ -4,10 +4,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from chromedriver_py import binary_path
+from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
+
+
 # Obtine codul sursa al paginii dupa ce a fost incarcat un anumit element, folosind Selenium
 def get_page_source(url, element_css_selector):
     # Inițializați un driver Selenium (asigurați-vă că aveți instalat Selenium și un driver de browser, de exemplu, pentru Chrome)
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Chrome(
+        service=Service(executable_path=binary_path), options=options
+    )
 
     # Deschideți pagina web
     driver.get(url)

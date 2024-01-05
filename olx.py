@@ -1,11 +1,14 @@
 # Description: Olx web scraper
 import requests
 import re
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from oferta import Oferta
 from functions import get_page_source
+
+from chromedriver_py import binary_path
+from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
 
 
 class OlxOferta(Oferta):
@@ -36,7 +39,10 @@ class OlxOferta(Oferta):
     # Gaseste numarul de vizualizari al ofertei curente
     def find_views(self):
         # Inițializați un driver Selenium (asigurați-vă că aveți instalat Selenium și un driver de browser, de exemplu, pentru Chrome)
-        driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        driver = webdriver.Chrome(
+            service=Service(executable_path=binary_path), options=options
+        )
 
         # Deschideți pagina web
         driver.get(self.url)
@@ -83,18 +89,63 @@ class OlxOferta(Oferta):
             photo_url = photo_element.find("img")["src"]
             self.photo_urls.append(photo_url)
 
+    # Gaseste pretul ofertei curente
+    def find_price(self):
+        # Faceți o cerere HTTP la pagina produsului
+        product_response = requests.get(self.url)
+
+        if product_response.status_code != 200:
+            print("Cererea HTTP pentru produs a eșuat, url produs:" + self.url)
+            return
+        product_html = product_response.text
+        product_soup = BeautifulSoup(product_html, "html.parser")
+
+        # Extrage elementul span cu pretul produsului
+        price_element = product_soup.find("h3", class_="css-93ez2t")
+
+        if price_element:
+            # Extragem textul din element și eliminăm "lei " pentru a obține numărul
+            self.price = price_element.get_text().replace("lei", "")
+            return
+
+        print(
+            "Elemetul cu pretul nu a fost gasit in pagina produsului: ",
+            self.url,
+        )
+        return
+
     # Completeaza campurile ofertei curente
     def complete_fields(self):
-        self.find_id()
-        self.find_views()
-        self.find_photo_urls()
+        try:
+            self.find_id()
+        except Exception as e:
+            print(e)
+            self.id = "0"
+
+        try:
+            self.find_views()
+        except Exception as e:
+            print(e)
+            self.views = "0"
+
+        try:
+            self.find_photo_urls()
+        except Exception as e:
+            print(e)
+            self.photo_urls = []
+
+        try:
+            self.find_price()
+        except Exception as e:
+            print(e)
+            self.price = "0"
 
     # Salvam oferta in baza de date
     def save(self, cursor):
         sql = 'INSERT INTO oferta ("id_produs", "titlu", "descriere", "pret", "magazin") \
             VALUES (%s, %s, %s, %s, %s);'
 
-        cursor.execute(sql, (self.id, self.titlu, "No description", self.pret, "Olx"))
+        cursor.execute(sql, (self.id, self.titlu, "No description", self.price, "Olx"))
 
 
 class Olx:
@@ -132,7 +183,7 @@ class Olx:
             price_text = price_element.get_text()
             match = re.search(r"\d+", price_text)
             if match:
-                oferte[i].pret = match.group()
+                oferte[i].price = match.group()
                 i += 1
             else:
                 print(
