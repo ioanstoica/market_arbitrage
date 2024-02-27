@@ -1,0 +1,26 @@
+{% extends 'home/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div>
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+    <p>Price: {{ product.price }} RON</p>
+    <p><a href="{{ product.url }}">Product URL</a></p>
+    <p>Views: {{ product.view_count }}</p>
+
+    {% comment %} Fotografiile {% endcomment %}
+    <h2>Fotografii</h2>
+    <div>
+        {% for photo in photos %}
+            <img src="{{ photo.url }}" alt="Imagine produs">
+        {% endfor %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Completare campuri">
+    </form>
+</div>
+{% endblock %}

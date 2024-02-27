@@ -1,0 +1,52 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Compari{% endblock %}</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+
+
+</head>
+
+<body>
+
+    <header>
+        <!-- Aici va fi meniul -->
+        <nav>
+            <ul class = "nav bg-info">
+                <!-- Adaugă alte linkuri aici -->
+                <li "nav-item"><a class="nav-link link-light" href="{% url 'home' %}">Acasă</a></li>
+                <li "nav-item"><a class="nav-link link-light" href="{% url 'products' %}">Produse</a></li>
+                <li "nav-item"><a class="nav-link link-light" href="{% url 'chat' %}">Chat</a></li>
+                <li "nav-item"><a class="nav-link link-light" href="{% url 'login' %}">Log in</a></li>
+                <li "nav-item"><a class="nav-link link-light" href="{% url 'signup' %}">Sign up</a></li>
+                <li "nav-item"><a class="nav-link link-light" href="{% url 'logout' %}">Logout</a></li>
+                <li "nav-item"><div class="nav-link link-light"> User: {{request.user}} </div></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Conținutul specific fiecărei pagini va merge aici -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Footer dacă este necesar -->
+    </footer>
+
+</body>
+
+</html>

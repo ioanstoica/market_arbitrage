@@ -1,0 +1,4 @@
+Asa arata un element in html care afiseaza pretul unui produs:
+<div class="es--wrap--erdmPRe notranslate" style="font-size: 24px;"><span class="es--char--Vcv75ku">RON</span><span class="es--space2--RQyDO8w"></span><span class="es--char53--VKKip5c" data-spm-anchor-id="a2g0o.detail.0.i5.4f833310RjNcAv">1</span><span class="es--char53--VKKip5c">1</span><span class="es--char53--VKKip5c">1</span><span class="es--char--Vcv75ku">.</span><span class="es--char--Vcv75ku">9</span><span class="es--char--Vcv75ku">8</span></div>
+
+Vreau sa extrag pretul folosind BeautifullSoup

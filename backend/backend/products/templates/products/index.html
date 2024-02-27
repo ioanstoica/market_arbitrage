@@ -1,0 +1,28 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Produse{% endblock %}
+
+{% block content %}
+<h1>Ultimele produse adaugate</h1>
+{% if latest_product_list %}
+<ul>
+    {% for product in latest_product_list %}
+    <li>
+        <a href="/products/{{ product.id }}/">{{ product.url }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No products are available.</p>
+{% endif %}
+
+<h1>Adauga produse</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="product_name"> Denumire produs</label> <br>
+    <input type="text" id="product_name" name="product_name"> <br>
+    <label for="search_count"> Nr cautari</label> <br>
+    <input type="number" id="search_count" name="search_count"> <br>
+    <input type="submit" value="Cauta">
+</form>
+{% endblock %}

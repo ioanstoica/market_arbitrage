@@ -1,0 +1,65 @@
+01.11.2023
+In fisierul openai_similarty.py am un program care, folosind openai API, imi spune similaritatea dintre mai multe stringuri.
+
+Next step? Aliexpress search by photo.
+Aliexpress API's imi cere sa fiu o companie, si nu una romaneasca...
+
+Incerc fara API-uri.
+Se poate face cautarea dupa poza folosind https://www.aliseeks.com/
+Aceasta cautare imi returneaza o lista de anunturi.
+Vreau sa creez inca o clasa cu aceste anunturi. 
+Clasa sa contina url-ul anuntului, pretul si titlul.
+
+BeautifulSoup nu pare ca ma ajuta, deoarece pagina nu este statica si dinamica. Trecem la Selenium.
+Selenium, cu functia wait.until() functioneaza.
+Am obtinut link-urile anunturilor.
+Acum vreau sa obtin pretul si titlul.
+AM reusit sa obtin titlul si pretul. 
+Ce urmeaza? Pentru fiecare pereche (anunt Olx, anunt Aliexpress), sa obtin un scor de similaritate si un scor de profitabilitate.
+Apoi, pentru anunturile care au pe Olx peste un anumit numaru de views, si sunt suficient de similare, sa le sortez dupa profitabilitate.
+Refactoring pe clase.
+Next: sa obtinu link-urile pozelor unui anunt pe Olx.
+
+31.10.2023
+OLX API's merge, dar nu iti ofera date despre anunturile postate de alti useri... de este inutil.
+Codul cu Selenium functioneaza, dar nu chiar mereu.
+Merg in continuare pe Selenium pentru vizionari.
+La mai multe cereri probabil o sa-mi blocheze IP-ul. Deci, o sa trebuiasca sa folosesc un VPN. 
+Dar momentan nu este cazul.
+
+Descriere succinta algoritm:
+
+[08:59, 10/11/2023] Coman Mihai Numar 2: Vedem câte vizualizări are anunțul
+[08:59, 10/11/2023] Coman Mihai Numar 2: Dacă e promițător
+[08:59, 10/11/2023] Coman Mihai Numar 2: Apoi cautam sa vedem unde îl găsim
+[08:59, 10/11/2023] Coman Mihai Numar 2: Exemplu aliexpress
+[08:59, 10/11/2023] Coman Mihai Numar 2: Vedem cât costa pe olx
+[08:59, 10/11/2023] Coman Mihai Numar 2: Cat costa pe ali
+[08:59, 10/11/2023] Coman Mihai Numar 2: Și facem un fel de sporing
+[08:59, 10/11/2023] Coman Mihai Numar 2: Gen... are adaos 300% , ok
+[08:59, 10/11/2023] Coman Mihai Numar 2: Are 30% , nu e bun
+[08:59, 10/11/2023] Coman Mihai Numar 2: Și îți filtrează asa toate anunțurile de pe olx
+[08:59, 10/11/2023] Coman Mihai Numar 2: Și îți dă top 50 cele mai ok anunțuri după criteriile noastre
+[08:59, 10/11/2023] Coman Mihai Numar 2: Și din alea 50 , facem și noi o verificare umana
+[08:59, 10/11/2023] Coman Mihai Numar 2: Și asa știi ce sa vinzi / cumperi
+[08:59, 10/11/2023] Coman Mihai Numar 2: Analiza pe care o facem pe olx , o putem face și pe emag
+[08:59, 10/11/2023] Coman Mihai Numar 2: Datorita pozelor aproape identice ca ale chinezilor
+[08:59, 10/11/2023] Coman Mihai Numar 2: Facem căutarea după poza în ambele cazuri
+[08:59, 10/11/2023] Coman Mihai Numar 2: De exemplu vrei mașini
+[08:59, 10/11/2023] Coman Mihai Numar 2: Cauta tot de pe olx
+[08:59, 10/11/2023] Coman Mihai Numar 2: Cauta tot pe Autoscout
+[08:59, 10/11/2023] Coman Mihai Numar 2: După criteria anului/ km
+[08:59, 10/11/2023] Coman Mihai Numar 2: Și vezi ce marca de masina e cea mai ok pt vânzare
+[08:59, 10/11/2023] Coman Mihai Numar 2: Practic asta e rezumatul la ce vrem noi sa facem
+
+Momentan avem un cod care extrage inclusiv numarul de vizualizari ale unui produs de pe OLX. 
+Asta in fisierul olx.py
+
+
+28.10.2023
+Am reusit sa accesez corect un API de la OLX!!!
+
+Dupa ce am incercat sa iau numarul de vizulizari ale unui anunt folosind BeautifulSoup, apoi Selenium, acum incerc cu Olx API'sa
+https://developer.olx.ro/api/doc
+
+Observatie: Numarul de vizualizari, s-ar putea sa se reseteze la un interval de timp (poate zilnic), ceea ce nu e neaparat rau, ne intereseaza ce se cumpara acum.

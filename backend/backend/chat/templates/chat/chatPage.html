@@ -1,0 +1,121 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'chat/style.css' %}">
+
+<section style="background-color: white; height: 90vh; display: flex; justify-content: center; align-items: center;">
+    <div class="container py-5">
+
+        <div class="row d-flex justify-content-center">   
+            <div class="col-md-8 col-lg-6 col-xl-4">
+
+                <div class="card" id="chat1" style="border-radius: 15px;">
+
+                    <div
+                        class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                        style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <i class="fas fa-angle-left"></i>
+                        <p class="mb-0 fw-bold">Live chat</p>
+                        <i class="fas fa-times"></i>
+                    </div>
+
+                    <div  id = "id_chat_item_container" style= "overflow-y: auto; height: 350px;">
+                        
+                    </div>
+                
+                    <div class="card-body">
+
+                        <div class="form-outline input-group mb-3">
+                            <textarea class="form-control" id="id_message_send_input"  rows="2" style="resize: none;"></textarea>
+                            <button type="submit" id="id_message_send_button" class="btn btn-primary">Send</button>
+                        </div>
+                        <label class="form-label" for="textAreaExample">Type your message</label>
+
+                    </div>
+
+            </div>
+        </div>
+    </div>
+   
+</section>
+
+<script>
+    // Funcție pentru a derula containerul de mesaje în jos la adăugarea unui nou mesaj
+    function scrollDown() {
+        var chatContainer = document.getElementById("id_chat_item_container");
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+
+    const chatSocket = new WebSocket("ws://" + window.location.host + "/");
+    chatSocket.onopen = function (e) {
+        console.log("The connection was setup successfully !");
+    };
+    chatSocket.onclose = function (e) {
+        console.log("Something unexpected happened !");
+    };
+    document.querySelector("#id_message_send_input").focus();
+    document.querySelector("#id_message_send_input").onkeyup = function (e) {
+        if (e.keyCode == 13) {
+            document.querySelector("#id_message_send_button").click();
+        }
+    };
+    document.querySelector("#id_message_send_button").onclick = function (e) {
+        var messageInput = document.querySelector(
+            "#id_message_send_input"
+        ).value;
+        chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.username}}" }));
+    };
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+
+        // Creăm elementul div
+        var newDiv = document.createElement("div");
+        newDiv.classList.add("d-flex", "flex-row", "mb-4");
+
+        if (data.username == "{{request.user.username}}"){
+            newDiv.classList.add("justify-content-end");
+        }
+        else {
+            newDiv.classList.add("justify-content-start");
+        }
+
+        // Creăm elementul intern pentru conținut
+        var innerDiv = document.createElement("div");
+        innerDiv.classList.add("p-3", "ms-3");
+        innerDiv.style.borderRadius = "15px";
+        innerDiv.style.backgroundColor = "rgba(57, 192, 237, .2)";
+
+        // Creăm elementul p pentru textul conținutului
+        var paragraph = document.createElement("p");
+        paragraph.classList.add("small", "mb-0");
+        paragraph.textContent = data.username ;
+        paragraph.style.fontWeight = "bold";
+        paragraph.style.color = "black";
+
+        var paragraph2 = document.createElement("p");
+        paragraph.classList.add("small", "mb-0");
+        paragraph2.textContent = data.message;
+
+        // Adăugăm elementul p în interiorul div-ului intern
+        innerDiv.appendChild(paragraph);
+        innerDiv.appendChild(paragraph2);
+
+        // Adăugăm div-ul intern în div-ul extern
+        newDiv.appendChild(innerDiv);
+        
+        document.querySelector("#id_message_send_input").value = "";
+        document.querySelector("#id_chat_item_container").appendChild(newDiv);
+
+        scrollDown();
+    };
+
+
+
+</script>
+
+{% endblock %}

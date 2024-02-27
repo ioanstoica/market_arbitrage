@@ -1,0 +1,29 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<h1>S-a realizat cautarea de produse similare</h1>
+
+{% if similar_products %}
+    <h2>Produse similare cu 
+        <a href = "{{product.url }}">
+            {{ product.name }}
+        </a>
+
+        </h2>
+{% else %}
+    <h2>Nu s-au gasit produse similare cu {{ product.name }}</h2>
+{% endif %}
+
+{% for similar_product in similar_products %}
+    <a href="{{similar_product.url}}">
+        <p>{{ similar_product.url }}</p>
+    </a>
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Cauta produsec similare">
+</form>
+
+{% endblock %}

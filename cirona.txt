@@ -1,0 +1,3 @@
+Vreau sa fac un site, care sa aiba functionalitatille de singup, login,  logout, cu React pe frontend si Python + Django pe backend si o baza de date Oracle Database
+
+py manage.py startapp login
